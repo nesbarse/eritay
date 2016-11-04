@@ -136,6 +136,27 @@ moduloDocumento.controller('DocumentoPListController', ['$scope', '$routeParams'
 //        $scope.params = $scope.params.replace('&', '?');
 
         ///////////////////////////////////////////////////////////////////77777/77777
+        if ($routeParams.filter) {
+            $scope.filterParams = $routeParams.filter;
+            $scope.filterParamsURL = "&filter=" + $routeParams.filter;
+        } else {
+            $scope.filterParams = '';
+            $scope.filterParamsURL = '';
+        }
+        if ($routeParams.order) {
+            $scope.orderParams = $routeParams.order;
+            $scope.orderParamsURL = "&order=" + $routeParams.order;
+        } else {
+            $scope.orderParams = '';
+            $scope.orderParamsURL = '';
+        }
+        if ($routeParams.sfilter) {
+            $scope.sfilterParams = $routeParams.sfilter;
+            $scope.sfilterParamsURL = "&sfilter=" + $routeParams.sfilter;
+        } else {
+            $scope.sfilterParams = '';
+            $scope.sfilterParamsURL = '';
+        }
 
 
         if ($routeParams.sfilter) {

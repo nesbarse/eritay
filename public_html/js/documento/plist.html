@@ -51,9 +51,9 @@ THE SOFTWARE.
                                                 <div class="col-lg-3 col-md-3 col-sm-12">
                                                     <p>Mostrando una consulta de {{registers}} registros.</p>
                                                     <p ng-show="orderParams == ''">Contenido no ordenado</p>
-                                                    <p ng-show="orderParams != ''"><small>Contenido ordenado por {{order}} ({{ordervalue}}) <a href="#/{{ob}}/plist/{{numpage}}/{{rpp}}{{paramsWithoutOrder.replace('&', '?')}}" id="linkQuitarOrden">(Quitar orden)</a></small></p>
+                                                    <p ng-show="orderParams != ''"><small>Contenido ordenado por {{orderParams}} <a href="#/{{ob}}/plist/{{numpage}}/{{rpp}}?a=a{{filterParamsURL}}{{sfilterParamsURL}}" id="linkQuitarOrden">(Quitar orden)</a></small></p>
                                                     <p ng-show="filterParams == ''">Contenido no filtrado</p>
-                                                    <p ng-show="filterParams != ''"><small>Contenido filtrado ({{filter}} {{filteroperator}} {{filtervalue}}) <a href="#/{{ob}}/plist/{{numpage}}/{{rpp}}{{paramsWithoutFilter.replace('&', '?')}}" id="linkQuitarFiltro">(Quitar filtro)</a></small></p>
+                                                    <p ng-show="filterParams != ''"><small>Contenido filtrado ({{filterParams}}) <a href="#/{{ob}}/plist/{{numpage}}/{{rpp}}?a=a{{orderParamsURL}}{{sfilterParamsURL}}" id="linkQuitarFiltro">(Quitar filtro)</a></small></p>
                                                 </div>
 
                                                 <div class="col-lg-6  col-md-6 col-sm-8 text-center">
