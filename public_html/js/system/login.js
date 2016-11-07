@@ -13,11 +13,10 @@ moduloSistema.controller('LoginController', ['$scope', '$routeParams', '$locatio
 
         $scope.login = function () {
 
-            serverService.getDataFromPromise(serverService.getLoginPromise($scope.user.username, $scope.user.password)).then(function (response) {
-                if (response.status == 200) {
-                    console.log("patch 200");
+            serverService.getLoginPromise($scope.user.username, $scope.user.password).then(function (response) {
+                if (response.status == 200) {                    
                     sessionService.setSessionActive();
-                    sessionService.setUsername(response.message);
+                    sessionService.setUsername(response.data.message);
                     $location.path('home');
                 } else {
                     console.log("patch <>200");

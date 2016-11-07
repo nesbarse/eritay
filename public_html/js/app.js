@@ -85,29 +85,31 @@ eritay.config(['$routeProvider', function ($routeProvider) {
 
 eritay.run(function ($rootScope, $location, serverService, sessionService) {
     $rootScope.$on("$routeChangeStart", function (event, next, current) {
+        function failure() {
+            sessionService.setSessionInactive();
+            sessionService.setUsername('');
+            var nextUrl = next.$$route.originalPath;
+            if (nextUrl == '/home' || nextUrl == '/login' || nextUrl == '/license') {
+
+            } else {
+                $location.path("/login");
+            }
+        }
         //$rootScope.authenticated = false;
         sessionService.setSessionInactive();
         sessionService.setUsername('');
 
-        serverService.getDataFromPromise(serverService.getSessionPromise()).then(function (data) {
-            if (data['status'] == 200) {
+        serverService.getSessionPromise().then(function (response) {
+            if (response['status'] == 200) {
                 sessionService.setSessionActive();
-                sessionService.setUsername(data.message);
+                sessionService.setUsername(response.data.message);
             } else {
-                sessionService.setSessionInactive();
-                sessionService.setUsername('');
-                var nextUrl = next.$$route.originalPath;
-                if (nextUrl == '/home' || nextUrl == '/login' || nextUrl == '/license') {
-
-                } else {
-                    $location.path("/login");
-                }
+                failure();
             }
             ;
+        }).catch(function (data) {
+            failure();
         });
-
-
-
     });
 });
 

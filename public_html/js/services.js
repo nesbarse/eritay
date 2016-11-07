@@ -139,7 +139,7 @@ angular.module('Services', [])
                 },
                 getDataFromPromise: function (promise) {
                     return promise.then(function (result) {
-                        return result.data;
+                        return result;
                     });
                 },
                 get: function (objeto, numero) {

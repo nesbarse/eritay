@@ -6,11 +6,10 @@ moduloSistema.controller('LogoutController', ['$scope', '$routeParams', '$locati
         $scope.icon = "fa-file-text-o";
 
 
-        serverService.getDataFromPromise(serverService.getLogoutPromise()).then(function (response) {
+        serverService.getLogoutPromise().then(function (response) {
             if (response) {
                 sessionService.setSessionInactive();
                 sessionService.setUsername('');
-
                 $location.path('home');
             } else {
                 sessionService.setSessionInactive();

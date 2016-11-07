@@ -26,7 +26,6 @@
  *
  */
 
-
 'use strict';
 /* Controllers */
 
@@ -55,11 +54,11 @@ moduloDocumento.controller('DocumentoPListController', ['$scope', '$routeParams'
 
         if (!$routeParams.page) {
             $routeParams.page = 1;
-        }
+        };
 
         if (!$routeParams.rpp) {
             $routeParams.rpp = 10;
-        }
+        };
 
         $scope.numpage = $routeParams.page;
         $scope.rpp = $routeParams.rpp;
@@ -71,41 +70,50 @@ moduloDocumento.controller('DocumentoPListController', ['$scope', '$routeParams'
         $scope.filteroperator = "like";
         $scope.filtervalue = "";
 
-
         if ($routeParams.filter) {
             $scope.filterParams = $routeParams.filter;
         } else {
             $scope.filterParams = null;
-        }
+        };
+        
         if ($routeParams.order) {
             $scope.orderParams = $routeParams.order;
         } else {
             $scope.orderParams = null;
-        }
+        };
+        
         if ($routeParams.sfilter) {
             $scope.sfilterParams = $routeParams.sfilter;
         } else {
             $scope.sfilterParams = null;
-        }
+        };
 
         if ($routeParams.sfilter) {
             $scope.filterExpression = $routeParams.filter + '+' + $routeParams.sfilter;
         } else {
             $scope.filterExpression = $routeParams.filter;
-        }
+        };
 
-        var promise_getCount = serverService.promise_getCount($scope.ob, $scope.filterExpression);
-        var promise_getPage = serverService.promise_getPage($scope.ob, $scope.rpp, $scope.numpage, $scope.filterExpression, $routeParams.order);
-
-        $q.all([promise_getCount, promise_getPage]).then(function (data) {
-            if (data[0].status == 200 && data[1].status == 200) {
-                $scope.registers = data[0].data.message;
-                $scope.page = data[1].data.message;
+        serverService.promise_getCount($scope.ob, $scope.filterExpression).then(function (response) {
+            if (response.status == 200) {
+                $scope.registers = response.data.message;
                 $scope.pages = serverService.calculatePages($scope.rpp, $scope.registers);
+                if ($scope.numpage > $scope.pages) {
+                    $scope.numpage = $scope.pages;
+                }
+                return serverService.promise_getPage($scope.ob, $scope.rpp, $scope.numpage, $scope.filterExpression, $routeParams.order);
+            } else {
+                $scope.status = "Error en la recepción de datos del servidor";
+            }
+        }).then(function (response) {
+            if (response.status == 200) {
+                $scope.page = response.data.message;
                 $scope.status = "";
             } else {
                 $scope.status = "Error en la recepción de datos del servidor";
             }
+        }).catch(function (data) {
+            $scope.status = "Error en la recepción de datos del servidor";
         });
 
         $scope.getRangeArray = function (lowEnd, highEnd) {
@@ -115,9 +123,11 @@ moduloDocumento.controller('DocumentoPListController', ['$scope', '$routeParams'
             }
             return rangeArray;
         };
+
         $scope.evaluateMin = function (lowEnd, highEnd) {
             return Math.min(lowEnd, highEnd);
         };
+
         $scope.evaluateMax = function (lowEnd, highEnd) {
             return Math.max(lowEnd, highEnd);
         };
@@ -143,14 +153,16 @@ moduloDocumento.controller('DocumentoPListController', ['$scope', '$routeParams'
         $scope.doorder = function (orderField, ascDesc) {
             $location.url($scope.ob + '/' + $scope.op + '/' + $scope.numpage + '/' + $scope.rpp).search('filter', $scope.filterParams).search('sfilter', $scope.sfilterParams).search('order', orderField + ',' + ascDesc);
             return false;
-        }
+        };
+
         $scope.doresetorder = function () {
             $location.url($scope.ob + '/' + $scope.op + '/' + $scope.numpage + '/' + $scope.rpp).search('filter', $scope.filterParams).search('sfilter', $scope.sfilterParams);
             return false;
-        }
+        };
+
         $scope.doresetfilter = function () {
             $location.url($scope.ob + '/' + $scope.op + '/' + $scope.numpage + '/' + $scope.rpp).search('sfilter', $scope.sfilterParams).search('order', $routeParams.order);
             return false;
-        }
+        };
 
     }]);
