@@ -38,74 +38,86 @@ moduloUsuario.controller('UsuarioSelectionController', ['$scope', '$routeParams'
         $scope.icon = "fa-user";
         $scope.neighbourhood = 2;
 
+        $scope.visibles = {};
+        $scope.visibles.id = true;
+        $scope.visibles.login = true;
+        $scope.visibles.password = true;
+
+        $scope.go = function (num) {
+            sharedSpaceService.getObject().obj_usuario.id = num;
+            sharedSpaceService.setFase(2);
+            $location.path(sharedSpaceService.getReturnLink());
+        };
+
+
         if (!$routeParams.page) {
             $routeParams.page = 1;
         }
+        ;
 
         if (!$routeParams.rpp) {
             $routeParams.rpp = 10;
         }
+        ;
 
         $scope.numpage = $routeParams.page;
         $scope.rpp = $routeParams.rpp;
 
         $scope.order = "";
         $scope.ordervalue = "";
+
         $scope.filter = "id";
         $scope.filteroperator = "like";
         $scope.filtervalue = "";
-        $scope.systemfilter = "";
-        $scope.systemfilteroperator = "";
-        $scope.systemfiltervalue = "";
-        $scope.params = "";
-        $scope.paramsWithoutOrder = "";
-        $scope.paramsWithoutFilter = "";
-        $scope.paramsWithoutSystemFilter = "";
 
-        if ($routeParams.order && $routeParams.ordervalue) {
-            $scope.order = $routeParams.order;
-            $scope.ordervalue = $routeParams.ordervalue;
-            $scope.orderParams = "&order=" + $routeParams.order + "&ordervalue=" + $routeParams.ordervalue;
-            $scope.paramsWithoutFilter += $scope.orderParams;
-            $scope.paramsWithoutSystemFilter += $scope.orderParams;
+        if ($routeParams.filter) {
+            $scope.filterParams = $routeParams.filter;
         } else {
-            $scope.orderParams = "";
+            $scope.filterParams = null;
         }
+        ;
 
-        if ($routeParams.filter && $routeParams.filteroperator && $routeParams.filtervalue) {
-            $scope.filter = $routeParams.filter;
-            $scope.filteroperator = $routeParams.filteroperator;
-            $scope.filtervalue = $routeParams.filtervalue;
-            $scope.filterParams = "&filter=" + $routeParams.filter + "&filteroperator=" + $routeParams.filteroperator + "&filtervalue=" + $routeParams.filtervalue;
-            $scope.paramsWithoutOrder += $scope.filterParams;
-            $scope.paramsWithoutSystemFilter += $scope.filterParams;
+        if ($routeParams.order) {
+            $scope.orderParams = $routeParams.order;
         } else {
-            $scope.filterParams = "";
+            $scope.orderParams = null;
         }
+        ;
 
-        if ($routeParams.systemfilter && $routeParams.systemfilteroperator && $routeParams.systemfiltervalue) {
-            $scope.systemFilterParams = "&systemfilter=" + $routeParams.systemfilter + "&systemfilteroperator=" + $routeParams.systemfilteroperator + "&systemfiltervalue=" + $routeParams.systemfiltervalue;
-            $scope.paramsWithoutOrder += $scope.systemFilterParams;
-            $scope.paramsWithoutFilter += $scope.systemFilterParams;
+        if ($routeParams.sfilter) {
+            $scope.sfilterParams = $routeParams.sfilter;
         } else {
-            $scope.systemFilterParams = "";
+            $scope.sfilterParams = null;
         }
+        ;
 
-        $scope.params = ($scope.orderParams + $scope.filterParams + $scope.systemFilterParams);
-        $scope.params = $scope.params.replace('&', '?');
+        if ($routeParams.sfilter) {
+            $scope.filterExpression = $routeParams.filter + '+' + $routeParams.sfilter;
+        } else {
+            $scope.filterExpression = $routeParams.filter;
+        }
+        ;
 
-        serverService.getDataFromPromise(serverService.promise_getSome($scope.ob, $scope.rpp, $scope.numpage, $scope.filterParams, $scope.orderParams, $scope.systemFilterParams)).then(function (data) {
-            if (data.status != 200) {
-                $scope.status = "Error en la recepción de datos del servidor";
-            } else {
-                $scope.pages = data.message.pages.message;
-                if (parseInt($scope.numpage) > parseInt($scope.pages))
+        serverService.promise_getCount($scope.ob, $scope.filterExpression).then(function (response) {
+            if (response.status == 200) {
+                $scope.registers = response.data.message;
+                $scope.pages = serverService.calculatePages($scope.rpp, $scope.registers);
+                if ($scope.numpage > $scope.pages) {
                     $scope.numpage = $scope.pages;
-
-                $scope.page = data.message.page.message;
-                $scope.registers = data.message.registers.message;
-                $scope.status = "";
+                }
+                return serverService.promise_getPage($scope.ob, $scope.rpp, $scope.numpage, $scope.filterExpression, $routeParams.order);
+            } else {
+                $scope.status = "Error en la recepción de datos del servidor";
             }
+        }).then(function (response) {
+            if (response.status == 200) {
+                $scope.page = response.data.message;
+                $scope.status = "";
+            } else {
+                $scope.status = "Error en la recepción de datos del servidor";
+            }
+        }).catch(function (data) {
+            $scope.status = "Error en la recepción de datos del servidor";
         });
 
         $scope.getRangeArray = function (lowEnd, highEnd) {
@@ -115,32 +127,45 @@ moduloUsuario.controller('UsuarioSelectionController', ['$scope', '$routeParams'
             }
             return rangeArray;
         };
+
         $scope.evaluateMin = function (lowEnd, highEnd) {
             return Math.min(lowEnd, highEnd);
         };
+
         $scope.evaluateMax = function (lowEnd, highEnd) {
             return Math.max(lowEnd, highEnd);
         };
 
+        $scope.gotopage = function (numpage) {
+            $scope.numpage = numpage;
+            $location.path($scope.ob + '/' + $scope.op + '/' + $scope.numpage + '/' + $scope.rpp).search('filter', $scope.filterExpression).search('sfilter', $routeParams.sfilter).search('order', $routeParams.order);
+            return false;
+        };
+
         $scope.dofilter = function () {
-            if ($scope.filter != "" && $scope.filteroperator != "" && $scope.filtervalue != "") {
-                if ($routeParams.order && $routeParams.ordervalue) {
-                    if ($routeParams.systemfilter && $routeParams.systemfilteroperator) {
-                        $location.path($scope.ob + '/' + $scope.op + '/' + $scope.numpage + '/' + $scope.rpp).search('filter', $scope.filter).search('filteroperator', $scope.filteroperator).search('filtervalue', $scope.filtervalue).search('order', $routeParams.order).search('ordervalue', $routeParams.ordervalue).search('systemfilter', $routeParams.systemfilter).search('systemfilteroperator', $routeParams.systemfilteroperator).search('systemfiltervalue', $routeParams.systemfiltervalue);
-                    } else {
-                        $location.path($scope.ob + '/' + $scope.op + '/' + $scope.numpage + '/' + $scope.rpp).search('filter', $scope.filter).search('filteroperator', $scope.filteroperator).search('filtervalue', $scope.filtervalue).search('order', $routeParams.order).search('ordervalue', $routeParams.ordervalue);
-                    }
+            if ($scope.filter && $scope.filteroperator && $scope.filtervalue) {
+                if ($routeParams.filter) {
+                    $scope.filterExpression = $routeParams.filter + '+and,' + $scope.filter + ',' + $scope.filteroperator + ',' + $scope.filtervalue;
                 } else {
-                    $location.path($scope.ob + '/' + $scope.op + '/' + $scope.numpage + '/' + $scope.rpp).search('filter', $scope.filter).search('filteroperator', $scope.filteroperator).search('filtervalue', $scope.filtervalue);
+                    $scope.filterExpression = 'and,' + $scope.filter + ',' + $scope.filteroperator + ',' + $scope.filtervalue;
                 }
+                $location.path($scope.ob + '/' + $scope.op + '/' + $scope.numpage + '/' + $scope.rpp).search('filter', $scope.filterExpression).search('sfilter', $routeParams.sfilter).search('order', $routeParams.order);
             }
             return false;
         };
 
-        $scope.go = function (num) {
-            sharedSpaceService.getObject().obj_usuario.id = num;
-            sharedSpaceService.setFase(2);
-            $location.path(sharedSpaceService.getReturnLink());
+        $scope.doorder = function (orderField, ascDesc) {
+            $location.url($scope.ob + '/' + $scope.op + '/' + $scope.numpage + '/' + $scope.rpp).search('filter', $scope.filterParams).search('sfilter', $scope.sfilterParams).search('order', orderField + ',' + ascDesc);
+            return false;
         };
 
+        $scope.doresetorder = function () {
+            $location.url($scope.ob + '/' + $scope.op + '/' + $scope.numpage + '/' + $scope.rpp).search('filter', $scope.filterParams).search('sfilter', $scope.sfilterParams);
+            return false;
+        };
+
+        $scope.doresetfilter = function () {
+            $location.url($scope.ob + '/' + $scope.op + '/' + $scope.numpage + '/' + $scope.rpp).search('sfilter', $scope.sfilterParams).search('order', $routeParams.order);
+            return false;
+        };
     }]);

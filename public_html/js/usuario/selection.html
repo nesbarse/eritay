@@ -50,36 +50,36 @@ THE SOFTWARE.
                                             <div class="row">
                                                 <div class="col-lg-3 col-md-3 col-sm-12">
                                                     <p>Mostrando una consulta de {{registers}} registros.</p>
-                                                    <p ng-show="orderParams == ''">Contenido no ordenado</p>
-                                                    <p ng-show="orderParams != ''"><small>Contenido ordenado por {{order}} ({{ordervalue}}) <a href="#/{{ob}}/plist/{{numpage}}/{{rpp}}{{paramsWithoutOrder.replace('&', '?')}}" id="linkQuitarOrden">(Quitar orden)</a></small></p>
-                                                    <p ng-show="filterParams == ''">Contenido no filtrado</p>
-                                                    <p ng-show="filterParams != ''"><small>Contenido filtrado ({{filter}} {{filteroperator}} {{filtervalue}}) <a href="#/{{ob}}/plist/{{numpage}}/{{rpp}}{{paramsWithoutFilter.replace('&', '?')}}" id="linkQuitarFiltro">(Quitar filtro)</a></small></p>
+                                                    <p ng-show="orderParams == null">Contenido no ordenado</p>
+                                                    <p ng-show="orderParams != null"><small>Contenido ordenado por {{orderParams}} <a ng-click="doresetorder()" id="linkQuitarOrden">(Quitar orden)</a></small></p>
+                                                    <p ng-show="filterParams == null">Contenido no filtrado</p>
+                                                    <p ng-show="filterParams != null"><small>Contenido filtrado ({{filterParams}}) <a ng-click="doresetfilter()" id="linkQuitarFiltro">(Quitar filtro)</a></small></p>
                                                 </div>
 
                                                 <div class="col-lg-6  col-md-6 col-sm-8 text-center">
                                                     Paginación: <br>
                                                     <ul class="pagination">
-                                                        <li><a class="pagination_link" ng-show="numpage > 1" ng-attr-id="{{numpage - 1}}" ng-attr-href="{{'#/' + ob + '/' + op + '/' + (numpage - 1) + '/' + rpp + params}}">prev</a></li>
-                                                        <li><a class="pagination_link" id="1" ng-attr-href="{{'#/' + ob + '/' + op + '/1/' + rpp + params}}" ng-show="numpage > neighbourhood + 1">1</a></li>
+                                                        <li><a class="pagination_link" ng-show="numpage > 1" ng-attr-id="{{numpage - 1}}" ng-click="gotopage(numpage - 1)">prev</a></li>
+                                                        <li><a class="pagination_link" id="1" ng-click="gotopage(1)" ng-show="numpage > neighbourhood + 1">1</a></li>
 
-                                                        <li class="pagination_link disabled"><a href="#" ng-show="numpage > neighbourhood - -2">ooo</a></li>
+                                                        <li class="pagination_link disabled"><a ng-show="numpage > neighbourhood - -2">ooo</a></li>
 
                                                         <li ng-repeat="i in getRangeArray(evaluateMax(1, numpage - neighbourhood), (numpage - 1))">
-                                                            <a class="pagination_link" ng-attr-id="{{i}}" ng-attr-href="{{'#/' + ob + '/' + op + '/' + i + '/' + rpp + params}}">{{i}}</a>
+                                                            <a class="pagination_link" ng-attr-id="{{i}}" ng-click="gotopage(i)">{{i}}</a>
                                                         </li>
 
                                                         <li class="active" ng-show="(numpage >= 1) && (numpage <= pages)">
-                                                            <a class="pagination_link" ng-attr-id="{{numpage}}" ng-attr-href="{{'#/' + ob + '/' + op + '/' + numpage + '/' + rpp + params}}">{{numpage}}</a>
+                                                            <a class="pagination_link" ng-attr-id="{{numpage}}" ng-click="gotopage(numpage)">{{numpage}}</a>
                                                         </li>
 
                                                         <li ng-repeat="j in getRangeArray(numpage - -1, evaluateMin(numpage - -neighbourhood, pages))">
-                                                            <a class="pagination_link" ng-attr-id="{{j}}" ng-attr-href="{{'#/' + ob + '/' + op + '/' + j + '/' + rpp + params}}">{{j}}</a>
+                                                            <a class="pagination_link" ng-attr-id="{{j}}" ng-click="gotopage(j)">{{j}}</a>
                                                         </li>
 
-                                                        <li class="pagination_link disabled"><a href="#" ng-show="numpage < (pages - (neighbourhood - -1))">ooo</a></li>
+                                                        <li class="pagination_link disabled"><a ng-show="numpage < (pages - (neighbourhood - -1))">ooo</a></li>
 
-                                                        <li><a class="pagination_link" ng-show="numpage < pages - neighbourhood" ng-attr-id="{{pages}}" ng-attr-href="{{'#/' + ob + '/' + op + '/' + pages + '/' + rpp + params}}">{{pages}}</a></li>
-                                                        <li><a class="pagination_link" ng-show="numpage < pages" ng-attr-id="{{numpage - -1}}" ng-attr-href="{{'#/' + ob + '/' + op + '/' + (numpage - -1) + '/' + rpp + params}}">next</a></li>
+                                                        <li><a class="pagination_link" ng-show="numpage < pages - neighbourhood" ng-attr-id="{{pages}}" ng-click="gotopage(pages)">{{pages}}</a></li>
+                                                        <li><a class="pagination_link" ng-show="numpage < pages" ng-attr-id="{{numpage - -1}}" ng-click="gotopage(numpage - - 1)">next</a></li>
 
                                                     </ul>
                                                 </div>

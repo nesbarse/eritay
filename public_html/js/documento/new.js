@@ -66,8 +66,9 @@ moduloDocumento.controller('DocumentoNewController', ['$scope', '$routeParams', 
             var dateCambioAsString = $filter('date')($scope.obj.cambio, "dd/MM/yyyy");
             $scope.obj.alta = dateAltaAsString;
             $scope.obj.cambio = dateCambioAsString;
-            //console.log({json: JSON.stringify(serverService.array_identificarArray($scope.obj))});            
-            serverService.getDataFromPromise(serverService.promise_setOne($scope.ob, {json: JSON.stringify(serverService.array_identificarArray($scope.obj))})).then(function (data) {
+            var jsonToSend = {json: JSON.stringify(serverService.array_identificarArray($scope.obj))};
+            console.log(jsonToSend);
+            serverService.promise_setOne($scope.ob, jsonToSend).then(function (data) {
                 $scope.result = data;
             });
         };
@@ -131,6 +132,6 @@ moduloDocumento.controller('DocumentoNewController', ['$scope', '$routeParams', 
 //        };
 
 
-       
+
 
     }]);
