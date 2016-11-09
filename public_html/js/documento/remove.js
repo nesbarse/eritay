@@ -38,13 +38,12 @@ moduloDocumento.controller('DocumentoRemoveController', ['$scope', '$routeParams
         $scope.id = $routeParams.id;
         $scope.title = "Borrado de un documento";
         $scope.icon = "fa-file-text-o";
-        serverService.getDataFromPromise(serverService.promise_getOne($scope.ob, $scope.id)).then(function (data) {            
-            $scope.bean = data.message;
+        serverService.promise_getOne($scope.ob, $scope.id).then(function (response) {            
+            $scope.bean = response.data.message;
         });
-
         $scope.remove = function () {
-            serverService.promise_removeOne($scope.ob, $scope.id).then(function (data) {
-                $scope.result = data;
+            serverService.promise_removeOne($scope.ob, $scope.id).then(function (result) {
+                $scope.result = result.data;
             });
         }
         ;
