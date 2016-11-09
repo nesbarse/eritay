@@ -32,7 +32,7 @@ THE SOFTWARE.
                 <div class="panel panel-default">
                     <div class="panel-heading" style="font-family:Oswald , serif;"  ng-include="'js/system/header.html'"></div>
                     <div class="panel-body"  ng-cloak>
-                        <form name="outerForm" class="form-horizontal" ng-show="result == null">
+                        <ng-form name="outerForm" class="form-horizontal" ng-show="result == null">
 
                             <div id="id-group" class="form-group">
                                 <label class="col-sm-2 control-label" for="id">Identificador:</label>
@@ -183,28 +183,29 @@ THE SOFTWARE.
                             </div>
 
 
-                            <!--
-                            <saludo a="persona">
-                            -->
 
-                            <div class="form-group">
+                            <!-- falta chequear la validez-->
+                            <div class="form-group"  ng-class="{'has-error': (outerForm.obj_usuario.$error.required || outerForm.obj_usuario.$error.exists || outerForm.obj_usuario.$error.validatemin)}">                                                                                                                                   
                                 <label class="col-sm-2 control-label" for="obj_usuario">Usuario:</label>
                                 <div class="control col-sm-3">
                                     <div class="input-group foreign" id="obj_usuario_group">
                                         <span class="input-group-addon" id="obj_usuario_button" ng-click="chooseOne('usuario')">
                                             <span class="glyphicon glyphicon-search">
                                             </span>
-                                        </span>
-                                        <input ng-model="obj.obj_usuario.id" readonly="true" aria-describedby="basic-addon2" class="form-control" id="obj_usuario" name="obj_usuario" type="text" size="5" maxlength="5">
+                                        </span>                                        
+                                        <input type="text"  ng-model="obj.obj_usuario.id" validatemin="1"  ng-required="true"  aria-describedby="basic-addon2" class="form-control" id="obj_usuario" name="obj_usuario" type="text" size="5" maxlength="5">                                        
                                         <span class="input-group-addon">
                                             <linkusuario source="obj.obj_usuario"></linkusuario>                       
-                                        </span>
+                                        </span>                                       
                                     </div>
+                                    <span class="help-block" ng-show="outerForm.obj_usuario.$error.required">El campo es obligatorio</span>
+                                    <span class="help-block" ng-show="outerForm.obj_usuario.$error.validatemin">Debes elegir un usuario</span>
+                                    <span class="help-block" ng-show="outerForm.obj_usuario.$error.exists">El usuario no existe</span>
                                 </div>
-                            </div>
+                            </div>                                                                
 
 
-                            <div class="form-group">
+                            <div class="form-group" ng-class="{'has-error': (outerForm.obj_tipodocumento.$error.required || outerForm.obj_tipodocumento.$error.exists || outerForm.obj_tipodocumento.$error.validatemin)}">                                                                                                                                   
                                 <label class="col-sm-2 control-label" for="obj_tipodocumento">Tipo de documento:</label>
                                 <div class="control col-sm-3">
                                     <div class="input-group foreign" id="obj_tipodocumento_group">
@@ -212,14 +213,16 @@ THE SOFTWARE.
                                             <span class="glyphicon glyphicon-search">
                                             </span>
                                         </span>
-                                        <input 
-                                            ng-model="obj.obj_tipodocumento.id" readonly="true" aria-describedby="basic-addon2" class="form-control" id="obj_tipodocumento" name="obj_tipodocumento" type="text" size="5" maxlength="5">
+                                        <input type="text"  ng-model="obj.obj_tipodocumento.id" validatemin="1"  ng-required="true"  aria-describedby="basic-addon2" class="form-control" id="obj_tipodocumento" name="obj_tipodocumento" type="text" size="5" maxlength="5">                                        
                                         <span class="input-group-addon">
                                             <a href="#/tipodocumento/view/{{obj.obj_tipodocumento.id}}">
                                                 <span>{{obj.obj_tipodocumento.descripcion}}</span>
                                             </a>
                                         </span>
                                     </div>
+                                    <span class="help-block" ng-show="outerForm.obj_tipodocumento.$error.required">El campo es obligatorio</span>
+                                    <span class="help-block" ng-show="outerForm.obj_tipodocumento.$error.validatemin">Debes elegir un tipo de documento</span>
+                                    <span class="help-block" ng-show="outerForm.obj_tipodocumento.$error.exists">El tipo de documento no existe</span>
                                 </div>
                             </div>
 
@@ -264,32 +267,32 @@ THE SOFTWARE.
                                     <a class="btn btn-default" ng-click="close()">Cerrar</a>
                                 </div>
                             </div>
-                        </form>
-                        <div ng-show="result != null">
-                            <div class="alert alert-success" ng-show="result.status == 200">
-                                <div ng-show="op == 'edit'">
-                                    <h2>Se ha modificado el registro</h2>
-                                    <a ng-href="#/documento/view/{{id}}">Ver el registro modificado</a>
+                            </form>
+                            <div ng-show="result != null">
+                                <div class="alert alert-success" ng-show="result.status == 200">
+                                    <div ng-show="op == 'edit'">
+                                        <h2>Se ha modificado el registro</h2>
+                                        <a ng-href="#/documento/view/{{id}}">Ver el registro modificado</a>
+                                    </div>
+                                    <div ng-show="op == 'new'">
+                                        <h2>Se ha creado el registro</h2>
+                                        <a ng-href="#/documento/view/{{result.message}}">Ver el registro creado</a>
+                                    </div>                        
                                 </div>
-                                <div ng-show="op == 'new'">
-                                    <h2>Se ha creado el registro</h2>
-                                    <a ng-href="#/documento/view/{{result.message}}">Ver el registro creado</a>
-                                </div>                        
-                            </div>
-                            <div class="alert alert-danger" ng-show="result.status != 200">
-                                <div ng-show="op == 'edit'">
-                                    <h2>Error al modificar el documento: no se ha modificado el documento</h2>
-                                    <h3>Código: {{result.status}}</h3>
-                                    <h3>Mensaje: {{result.message}}</h3>                
-                                </div>
-                                <div ng-show="op == 'new'">
-                                    <h2>Error al crear el documento: no se ha creado el documento</h2>
-                                    <h3>Código: {{result.status}}</h3>
-                                    <h3>Mensaje: {{result.message}}</h3>                
-                                </div>
+                                <div class="alert alert-danger" ng-show="result.status != 200">
+                                    <div ng-show="op == 'edit'">
+                                        <h2>Error al modificar el documento: no se ha modificado el documento</h2>
+                                        <h3>Código: {{result.status}}</h3>
+                                        <h3>Mensaje: {{result.message}}</h3>                
+                                    </div>
+                                    <div ng-show="op == 'new'">
+                                        <h2>Error al crear el documento: no se ha creado el documento</h2>
+                                        <h3>Código: {{result.status}}</h3>
+                                        <h3>Mensaje: {{result.message}}</h3>                
+                                    </div>
 
+                                </div>
                             </div>
-                        </div>
                     </div>
                     <div class="panel-footer" style="font-family: Questrial, serif;" ng-include="'js/system/footer.html'"></div>
                 </div>

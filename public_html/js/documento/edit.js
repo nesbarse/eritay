@@ -68,14 +68,29 @@ moduloDocumento.controller('DocumentoEditController', ['$scope', '$routeParams',
         $scope.$watch('obj.obj_tipodocumento.id', function () {
             if ($scope.obj) {
                 serverService.promise_getOne('tipodocumento', $scope.obj.obj_tipodocumento.id).then(function (response) {
+                    var old_id = $scope.obj.obj_tipodocumento.id;
                     $scope.obj.obj_tipodocumento = response.data.message;
+                    if (response.data.message.id != 0) {
+                        $scope.outerForm.obj_tipodocumento.$setValidity('exists', true);
+                    } else {
+                        $scope.outerForm.obj_tipodocumento.$setValidity('exists', false);
+                        $scope.obj.obj_tipodocumento.id = old_id;
+                    }
                 });
             }
         });
+
         $scope.$watch('obj.obj_usuario.id', function () {
             if ($scope.obj) {
                 serverService.promise_getOne('usuario', $scope.obj.obj_usuario.id).then(function (response) {
+                    var old_id = $scope.obj.obj_usuario.id;
                     $scope.obj.obj_usuario = response.data.message;
+                    if (response.data.message.id != 0) {
+                        $scope.outerForm.obj_usuario.$setValidity('exists', true);
+                    } else {
+                        $scope.outerForm.obj_usuario.$setValidity('exists', false);
+                        $scope.obj.obj_usuario.id = old_id;
+                    }
                 });
             }
         });
