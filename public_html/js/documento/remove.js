@@ -42,10 +42,8 @@ moduloDocumento.controller('DocumentoRemoveController', ['$scope', '$routeParams
             $scope.bean = data.message;
         });
 
-
-
         $scope.remove = function () {
-            serverService.getDataFromPromise(serverService.promise_removeOne($scope.ob, $scope.id)).then(function (data) {
+            serverService.promise_removeOne($scope.ob, $scope.id).then(function (data) {
                 $scope.result = data;
             });
         }

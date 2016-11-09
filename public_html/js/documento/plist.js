@@ -52,16 +52,17 @@ moduloDocumento.controller('DocumentoPListController', ['$scope', '$routeParams'
         $scope.icon = "fa-file-text-o";
         $scope.neighbourhood = 2;
 
-        if (!$routeParams.page) {
-            $routeParams.page = 1;
-        };
+        if (!$routeParams.page || $routeParams.page < 1) {
+            $scope.numpage = 1;
+        } else {
+            $scope.numpage = $routeParams.page;
+        }
 
-        if (!$routeParams.rpp) {
-            $routeParams.rpp = 10;
-        };
-
-        $scope.numpage = $routeParams.page;
-        $scope.rpp = $routeParams.rpp;
+        if (!$routeParams.rpp || $routeParams.rpp < 1) {
+            $scope.rpp = 10;
+        } else {
+            $scope.rpp = $routeParams.rpp;
+        }
 
         $scope.order = "";
         $scope.ordervalue = "";
@@ -74,25 +75,29 @@ moduloDocumento.controller('DocumentoPListController', ['$scope', '$routeParams'
             $scope.filterParams = $routeParams.filter;
         } else {
             $scope.filterParams = null;
-        };
-        
+        }
+        ;
+
         if ($routeParams.order) {
             $scope.orderParams = $routeParams.order;
         } else {
             $scope.orderParams = null;
-        };
-        
+        }
+        ;
+
         if ($routeParams.sfilter) {
             $scope.sfilterParams = $routeParams.sfilter;
         } else {
             $scope.sfilterParams = null;
-        };
+        }
+        ;
 
         if ($routeParams.sfilter) {
             $scope.filterExpression = $routeParams.filter + '+' + $routeParams.sfilter;
         } else {
             $scope.filterExpression = $routeParams.filter;
-        };
+        }
+        ;
 
         serverService.promise_getCount($scope.ob, $scope.filterExpression).then(function (response) {
             if (response.status == 200) {

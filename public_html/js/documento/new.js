@@ -75,15 +75,15 @@ moduloDocumento.controller('DocumentoNewController', ['$scope', '$routeParams', 
 
         $scope.$watch('obj.obj_tipodocumento.id', function () {
             if ($scope.obj) {
-                serverService.getDataFromPromise(serverService.promise_getOne('tipodocumento', $scope.obj.obj_tipodocumento.id)).then(function (data2) {
-                    $scope.obj.obj_tipodocumento = data2.message;
+                serverService.promise_getOne('tipodocumento', $scope.obj.obj_tipodocumento.id).then(function (response) {
+                    $scope.obj.obj_tipodocumento = response.data.message;
                 });
             }
         });
         $scope.$watch('obj.obj_usuario.id', function () {
             if ($scope.obj) {
-                serverService.getDataFromPromise(serverService.promise_getOne('usuario', $scope.obj.obj_usuario.id)).then(function (data2) {
-                    $scope.obj.obj_usuario = data2.message;
+                serverService.promise_getOne('usuario', $scope.obj.obj_usuario.id).then(function (response) {
+                    $scope.obj.obj_usuario = response.data.message;
                 });
             }
         });

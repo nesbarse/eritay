@@ -27,18 +27,14 @@
  */
 'use strict';
 
-
-
-
-
-moduloDocumento.controller('DocumentoViewController', ['$scope', '$routeParams', 'serverService','$location',
-    function ($scope, $routeParams, serverService,$location) {
+moduloDocumento.controller('DocumentoViewController', ['$scope', '$routeParams', 'serverService', '$location',
+    function ($scope, $routeParams, serverService, $location) {
         $scope.title = "Vista de documento";
         $scope.icon = "fa-file-text-o";
         $scope.ob = 'documento';
         $scope.id = $routeParams.id;
-        serverService.getDataFromPromise(serverService.promise_getOne($scope.ob, $scope.id)).then(function (data) {
-            $scope.bean = data.message;
+        serverService.promise_getOne($scope.ob, $scope.id).then(function (response) {
+            $scope.bean = response.data.message;
         });
         $scope.close = function () {
             $location.path('/home');

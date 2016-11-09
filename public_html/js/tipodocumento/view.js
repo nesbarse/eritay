@@ -26,19 +26,22 @@
  * 
  */
 'use strict';
-
-
-
-
-
-moduloTipodocumento.controller('TipodocumentoViewController', ['$scope', '$routeParams', 'serverService',
-    function ($scope, $routeParams, serverService) {
+moduloDocumento.controller('TipodocumentoViewController', ['$scope', '$routeParams', 'serverService', '$location',
+    function ($scope, $routeParams, serverService, $location) {
+        $scope.title = "Vista de tipo de documento";
+        $scope.icon = "fa-file-text-o";
+        $scope.ob = 'tipodocumento';
+        $scope.id = $routeParams.id;
+        serverService.promise_getOne($scope.ob, $scope.id).then(function (response) {
+            $scope.bean = response.data.message;
+        });
+        $scope.close = function () {
+            $location.path('/home');
+        };
+        $scope.plist = function () {
+            $location.path('/documento/plist');
+        };
         $scope.back = function () {
             window.history.back();
         };
-        $scope.ob = 'tipodocumento';
-        $scope.id = $routeParams.id;
-        serverService.getDataFromPromise(serverService.promise_getOne($scope.ob, $scope.id)).then(function (data) {            
-            $scope.bean = data.message;
-        });
     }]);

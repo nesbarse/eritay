@@ -43,25 +43,17 @@ moduloUsuario.controller('UsuarioSelectionController', ['$scope', '$routeParams'
         $scope.visibles.login = true;
         $scope.visibles.password = true;
 
-        $scope.go = function (num) {
-            sharedSpaceService.getObject().obj_usuario.id = num;
-            sharedSpaceService.setFase(2);
-            $location.path(sharedSpaceService.getReturnLink());
-        };
-
-
-        if (!$routeParams.page) {
-            $routeParams.page = 1;
+        if (!$routeParams.page || $routeParams.page < 1) {
+            $scope.numpage = 1;
+        } else {
+            $scope.numpage = $routeParams.page;
         }
-        ;
 
-        if (!$routeParams.rpp) {
-            $routeParams.rpp = 10;
+        if (!$routeParams.rpp || $routeParams.rpp < 1) {
+            $scope.rpp = 10;
+        } else {
+            $scope.rpp = $routeParams.rpp;
         }
-        ;
-
-        $scope.numpage = $routeParams.page;
-        $scope.rpp = $routeParams.rpp;
 
         $scope.order = "";
         $scope.ordervalue = "";
@@ -75,28 +67,24 @@ moduloUsuario.controller('UsuarioSelectionController', ['$scope', '$routeParams'
         } else {
             $scope.filterParams = null;
         }
-        ;
 
         if ($routeParams.order) {
             $scope.orderParams = $routeParams.order;
         } else {
             $scope.orderParams = null;
         }
-        ;
 
         if ($routeParams.sfilter) {
             $scope.sfilterParams = $routeParams.sfilter;
         } else {
             $scope.sfilterParams = null;
         }
-        ;
 
         if ($routeParams.sfilter) {
             $scope.filterExpression = $routeParams.filter + '+' + $routeParams.sfilter;
         } else {
             $scope.filterExpression = $routeParams.filter;
         }
-        ;
 
         serverService.promise_getCount($scope.ob, $scope.filterExpression).then(function (response) {
             if (response.status == 200) {
@@ -167,5 +155,11 @@ moduloUsuario.controller('UsuarioSelectionController', ['$scope', '$routeParams'
         $scope.doresetfilter = function () {
             $location.url($scope.ob + '/' + $scope.op + '/' + $scope.numpage + '/' + $scope.rpp).search('sfilter', $scope.sfilterParams).search('order', $routeParams.order);
             return false;
+        };
+
+        $scope.go = function (num) {
+            sharedSpaceService.getObject().obj_usuario.id = num;
+            sharedSpaceService.setFase(2);
+            $location.path(sharedSpaceService.getReturnLink());
         };
     }]);

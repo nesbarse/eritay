@@ -109,15 +109,17 @@ angular.module('Services', [])
                     }
                     return pages;
                 },
-                ////////////////////////////////////////////////////////////////
                 promise_getOne: function (strClass, id) {
                     return $http.get(this.getAppUrl() + '?ob=' + strClass + '&op=get&id=' + id, 'GET', '');
-//                                   return $http({
-//                        url: this.getAppUrl() + '?ob=' + strClass + '&op=getaggregateviewone&id=' + id,
-//                        method: "GET"
-//
-//                    });
                 },
+                promise_removeOne: function (strClass, id) {
+                    return $http.get(this.getAppUrl() + '?ob=' + strClass + '&op=remove&id=' + id, 'GET', '');
+                },
+                promise_setOne: function (strClass, jsonfile) {
+                    $http.defaults.headers.put['Content-Type'] = 'application/json;charset=utf-8';
+                    return $http.get(this.getAppUrl() + '?ob=' + strClass + '&op=set', {params: jsonfile});
+                },
+                ////////////////////////////////////////////////////////////////
                 promise_getMeta: function (strClass) {
                     return $http.get(this.getAppUrl() + '?ob=' + strClass + '&op=getmetainformation', 'GET', '');
                 },
@@ -127,15 +129,8 @@ angular.module('Services', [])
                 promise_getAll: function (strClass, filterParams, orderParams, systemfilterParams) {
                     return $http.get(this.getAppUrl() + '?ob=' + strClass + '&op=getaggregateviewall' + filterParams + orderParams + systemfilterParams, 'GET', '');
                 },
-                promise_removeOne: function (strClass, id) {
-                    return $http.get(this.getAppUrl() + '?ob=' + strClass + '&op=remove&id=' + id, 'GET', '');
-                },
                 promise_getPromise: function (strClass, operation, params) {
                     return $http.get(this.getAppUrl() + '?ob=' + strClass + '&op=' + operation + params, 'GET', '');
-                },
-                promise_setOne: function (strClass, jsonfile) {
-                    $http.defaults.headers.put['Content-Type'] = 'application/json;charset=utf-8';
-                    return $http.get(this.getAppUrl() + '?ob=' + strClass + '&op=set', {params: jsonfile});
                 },
                 getDataFromPromise: function (promise) {
                     return promise.then(function (result) {

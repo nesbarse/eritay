@@ -79,7 +79,7 @@ THE SOFTWARE.
                                                         <li class="pagination_link disabled"><a ng-show="numpage < (pages - (neighbourhood - -1))">ooo</a></li>
 
                                                         <li><a class="pagination_link" ng-show="numpage < pages - neighbourhood" ng-attr-id="{{pages}}" ng-click="gotopage(pages)">{{pages}}</a></li>
-                                                        <li><a class="pagination_link" ng-show="numpage < pages" ng-attr-id="{{numpage - -1}}" ng-click="gotopage(numpage - - 1)">next</a></li>
+                                                        <li><a class="pagination_link" ng-show="numpage < pages" ng-attr-id="{{numpage - -1}}" ng-click="gotopage(numpage - -1)">next</a></li>
 
                                                     </ul>
                                                 </div>
@@ -185,44 +185,44 @@ THE SOFTWARE.
                                     <tr>                                                   
                                         <th ng-show="visibles.id" class="text-center">
                                             Ident.<br/>
-                                            <a ng-show="visibles.id" href="#/{{ob}}/plist/{{numpage}}/{{rpp}}?order=id&ordervalue=asc{{paramsWithoutOrder}}"><i class="glyphicon glyphicon-arrow-up"></i></a>
-                                            <a ng-show="visibles.id" href="#/{{ob}}/plist/{{numpage}}/{{rpp}}?order=id&ordervalue=desc{{paramsWithoutOrder}}"><i class="glyphicon glyphicon-arrow-down"></i></a>
+                                            <a ng-show="visibles.id" ng-click="doorder('id', 'asc')"><i class="glyphicon glyphicon-arrow-up"></i></a>
+                                            <a ng-show="visibles.id" ng-click="doorder('id', 'desc')"><i class="glyphicon glyphicon-arrow-down"></i></a>                                                                                     
                                         </th>
                                         <th ng-show="visibles.login" class="text-center">
                                             Login<br/>
-                                            <a ng-show="visibles.login" href="#/{{ob}}/plist/{{numpage}}/{{rpp}}?order=login&ordervalue=asc{{paramsWithoutOrder}}"><i class="glyphicon glyphicon-arrow-up"></i></a>
-                                            <a ng-show="visibles.login" href="#/{{ob}}/plist/{{numpage}}/{{rpp}}?order=login&ordervalue=desc{{paramsWithoutOrder}}"><i class="glyphicon glyphicon-arrow-down"></i></a>
+                                            <a ng-show="visibles.login" ng-click="doorder('login', 'asc')"><i class="glyphicon glyphicon-arrow-up"></i></a>
+                                            <a ng-show="visibles.login" ng-click="doorder('login', 'desc')"><i class="glyphicon glyphicon-arrow-down"></i></a>                                                                                     
                                         </th>
                                         <th ng-show="visibles.password" class="text-center">
                                             Password<br/>
-                                            <a ng-show="visibles.password" href="#/{{ob}}/plist/{{numpage}}/{{rpp}}?order=password&ordervalue=asc{{paramsWithoutOrder}}"><i class="glyphicon glyphicon-arrow-up"></i></a>
-                                            <a ng-show="visibles.password" href="#/{{ob}}/plist/{{numpage}}/{{rpp}}?order=password&ordervalue=desc{{paramsWithoutOrder}}"><i class="glyphicon glyphicon-arrow-down"></i></a>
+                                            <a ng-show="visibles.password" ng-click="doorder('password', 'asc')"><i class="glyphicon glyphicon-arrow-up"></i></a>
+                                            <a ng-show="visibles.password" ng-click="doorder('password', 'desc')"><i class="glyphicon glyphicon-arrow-down"></i></a>                                                                                     
 
                                         </th>
                                         <th  ng-show="visibles.id_estado" class="text-center">
                                             Estado<br/>
-                                            <a ng-show="visibles.id_estado"  href="#/{{ob}}/plist/{{numpage}}/{{rpp}}?order=id_estado&ordervalue=asc{{paramsWithoutOrder}}"><i class="glyphicon glyphicon-arrow-up"></i></a>
-                                            <a ng-show="visibles.id_estado"  href="#/{{ob}}/plist/{{numpage}}/{{rpp}}?order=id_estado&ordervalue=desc{{paramsWithoutOrder}}"><i class="glyphicon glyphicon-arrow-down"></i></a>
+                                            <a ng-show="visibles.id_estado" ng-click="doorder('id_estado', 'asc')"><i class="glyphicon glyphicon-arrow-up"></i></a>
+                                            <a ng-show="visibles.id_estado" ng-click="doorder('id_estado', 'desc')"><i class="glyphicon glyphicon-arrow-down"></i></a>                                                                                     
                                         </th>
                                         <th ng-show="visibles.id_tipousuario" class="text-center">
                                             Tipo<br/>
-                                            <a ng-show="visibles.id_tipousuario"  href="#/{{ob}}/plist/{{numpage}}/{{rpp}}?order=id_tipousuario&ordervalue=asc{{paramsWithoutOrder}}"><i class="glyphicon glyphicon-arrow-up"></i></a>
-                                            <a ng-show="visibles.id_tipousuario"  href="#/{{ob}}/plist/{{numpage}}/{{rpp}}?order=id_tipousuario&ordervalue=desc{{paramsWithoutOrder}}"><i class="glyphicon glyphicon-arrow-down"></i></a>
+                                            <a ng-show="visibles.id_tipousuario" ng-click="doorder('id_tipousuario', 'asc')"><i class="glyphicon glyphicon-arrow-up"></i></a>
+                                            <a ng-show="visibles.id_tipousuario" ng-click="doorder('id_tipousuario', 'desc')"><i class="glyphicon glyphicon-arrow-down"></i></a>                                                                                     
                                         </th>
                                         <th ng-show="visibles.ciudad" class="text-center">
                                             Ciudad<br/>
-                                            <a ng-show="visibles.ciudad"  href="#/{{ob}}/plist/{{numpage}}/{{rpp}}?order=ciudad&ordervalue=asc{{paramsWithoutOrder}}"><i class="glyphicon glyphicon-arrow-up"></i></a>
-                                            <a ng-show="visibles.ciudad"  href="#/{{ob}}/plist/{{numpage}}/{{rpp}}?order=ciudad&ordervalue=desc{{paramsWithoutOrder}}"><i class="glyphicon glyphicon-arrow-down"></i></a>
+                                            <a ng-show="visibles.ciudad" ng-click="doorder('ciudad', 'asc')"><i class="glyphicon glyphicon-arrow-up"></i></a>
+                                            <a ng-show="visibles.ciudad" ng-click="doorder('ciudad', 'desc')"><i class="glyphicon glyphicon-arrow-down"></i></a>                                                                                     
                                         </th>
                                         <th ng-show="visibles.firma" class="text-center">
                                             Firma<br/>
-                                            <a ng-show="visibles.firma"  href="#/{{ob}}/plist/{{numpage}}/{{rpp}}?order=firma&ordervalue=asc{{paramsWithoutOrder}}"><i class="glyphicon glyphicon-arrow-up"></i></a>
-                                            <a ng-show="visibles.firma"  href="#/{{ob}}/plist/{{numpage}}/{{rpp}}?order=firma&ordervalue=desc{{paramsWithoutOrder}}"><i class="glyphicon glyphicon-arrow-down"></i></a>
+                                            <a ng-show="visibles.firma" ng-click="doorder('firma', 'asc')"><i class="glyphicon glyphicon-arrow-up"></i></a>
+                                            <a ng-show="visibles.firma" ng-click="doorder('firma', 'desc')"><i class="glyphicon glyphicon-arrow-down"></i></a>                                                                                     
                                         </th>
                                         <th ng-show="visibles.skin" class="text-center">
                                             Skin<br/>
-                                            <a ng-show="visibles.skin"  href="#/{{ob}}/plist/{{numpage}}/{{rpp}}?order=skin&ordervalue=asc{{paramsWithoutOrder}}"><i class="glyphicon glyphicon-arrow-up"></i></a>
-                                            <a ng-show="visibles.skin"  href="#/{{ob}}/plist/{{numpage}}/{{rpp}}?order=skin&ordervalue=desc{{paramsWithoutOrder}}"><i class="glyphicon glyphicon-arrow-down"></i></a>
+                                            <a ng-show="visibles.skin" ng-click="doorder('skin', 'asc')"><i class="glyphicon glyphicon-arrow-up"></i></a>
+                                            <a ng-show="visibles.skin" ng-click="doorder('skin', 'desc')"><i class="glyphicon glyphicon-arrow-down"></i></a>                                                                                     
                                         </th>
                                         <th  class="text-center">
                                             Acciones
@@ -250,8 +250,6 @@ THE SOFTWARE.
                         </div>
                     </div>
                     <div class="panel-footer" style="font-family: Questrial, serif;" ng-include="'js/system/footer.html'"></div>
-
-
                 </div>
             </div>
         </div>     
