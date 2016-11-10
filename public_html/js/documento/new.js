@@ -30,6 +30,8 @@
 moduloDocumento.controller('DocumentoNewController', ['$scope', '$routeParams', '$location', 'serverService', 'sharedSpaceService', '$filter',
     function ($scope, $routeParams, $location, serverService, sharedSpaceService, $filter) {
 
+        $scope.eventSources = [];
+
         $scope.ob = 'documento';
         $scope.op = 'new';
 
@@ -113,11 +115,9 @@ moduloDocumento.controller('DocumentoNewController', ['$scope', '$routeParams', 
             $location.path('/documento/plist');
         };
 
-        //datepickers
-        $scope.minDate = new Date(2016, 0, 1);
-        $scope.maxDate = new Date(2019, 11, 31);
 
-        //datepicker 1 (fecha de alta)
+
+        //datepicker 1 
         $scope.open1 = function () {
             $scope.popup1.opened = true;
         };
@@ -129,7 +129,7 @@ moduloDocumento.controller('DocumentoNewController', ['$scope', '$routeParams', 
             startingDay: 1
         };
 
-        //datepicker 2 (fecha de alta)
+        //datepicker 2 
         $scope.open2 = function () {
             $scope.popup2.opened = true;
         };
@@ -140,6 +140,8 @@ moduloDocumento.controller('DocumentoNewController', ['$scope', '$routeParams', 
             formatYear: 'yyyy',
             startingDay: 1
         };
+
+
 
 
 //        $scope.disabled = function (date, mode) {

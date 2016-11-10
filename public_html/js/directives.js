@@ -49,6 +49,31 @@ angular.module('Directives', [])
             }
         })
 
+//        .directive('validDate', function () {
+//            return {
+//                restrict: 'A',
+//                require: 'ngModel',
+//                link: function (scope, element, attrs, control) {
+////                    element.bind("keyup", function (event) {
+////                        var newDate = control.$viewValue;
+////                        if (!newDate.match(/^((0?[1-9]|[12][0-9]|3[01])[- /.](0?[1-9]|1[012])[- /.](19|20)?[0-9]{2})*$/))
+////                            control.$setValidity("validDate", true);
+////                        else
+////                            control.$setValidity("validDate", false);
+////                    });
+//                    control.$parsers.push(function (viewValue) {
+//                        var newDate = control.$viewValue;
+//                        control.$setValidity("validDate", true);
+//                        if (typeof newDate === "object" || newDate == "")
+//                            return newDate;  // pass through if we clicked date from popup
+//                        if (!newDate.match(/^((0?[1-9]|[12][0-9]|3[01])[- /.](0?[1-9]|1[012])[- /.](19|20)?[0-9]{2})*$/))
+//                            control.$setValidity("validDate", false);
+//                        return viewValue;
+//                    });
+//                }
+//            };
+//        })
+
 
         .directive('validatemin', function () {
             return {

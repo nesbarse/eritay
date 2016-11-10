@@ -47,14 +47,14 @@ moduloDocumento.controller('DocumentoEditController', ['$scope', '$routeParams',
             $scope.obj = sharedSpaceService.getObject();
             sharedSpaceService.setFase(0);
         }
-        
+
         $scope.chooseOne = function (foreignObjectName) {
             sharedSpaceService.setObject($scope.obj);
             sharedSpaceService.setReturnLink('/' + $scope.ob + '/' + $scope.op + '/' + $scope.id);
             sharedSpaceService.setFase(1);
             $location.path('/' + foreignObjectName + '/selection/1/10');
         }
-        
+
         $scope.save = function () {
             var dateAltaAsString = $filter('date')($scope.obj.alta, "dd/MM/yyyy");
             var dateCambioAsString = $filter('date')($scope.obj.cambio, "dd/MM/yyyy");
@@ -65,16 +65,21 @@ moduloDocumento.controller('DocumentoEditController', ['$scope', '$routeParams',
                 $scope.result = data;
             });
         };
+
         $scope.$watch('obj.obj_tipodocumento.id', function () {
             if ($scope.obj) {
                 serverService.promise_getOne('tipodocumento', $scope.obj.obj_tipodocumento.id).then(function (response) {
-                    var old_id = $scope.obj.obj_tipodocumento.id;
-                    $scope.obj.obj_tipodocumento = response.data.message;
-                    if (response.data.message.id != 0) {
-                        $scope.outerForm.obj_tipodocumento.$setValidity('exists', true);
+                    if (response.status == 200) {
+                        var old_id = $scope.obj.obj_tipodocumento.id;
+                        $scope.obj.obj_tipodocumento = response.data.message;
+                        if (response.data.message.id != 0) {
+                            $scope.outerForm.obj_tipodocumento.$setValidity('exists', true);
+                        } else {
+                            $scope.outerForm.obj_tipodocumento.$setValidity('exists', false);
+                            $scope.obj.obj_tipodocumento.id = old_id;
+                        }
                     } else {
-                        $scope.outerForm.obj_tipodocumento.$setValidity('exists', false);
-                        $scope.obj.obj_tipodocumento.id = old_id;
+
                     }
                 });
             }
@@ -83,13 +88,17 @@ moduloDocumento.controller('DocumentoEditController', ['$scope', '$routeParams',
         $scope.$watch('obj.obj_usuario.id', function () {
             if ($scope.obj) {
                 serverService.promise_getOne('usuario', $scope.obj.obj_usuario.id).then(function (response) {
-                    var old_id = $scope.obj.obj_usuario.id;
-                    $scope.obj.obj_usuario = response.data.message;
-                    if (response.data.message.id != 0) {
-                        $scope.outerForm.obj_usuario.$setValidity('exists', true);
+                    if (response.status == 200) {
+                        var old_id = $scope.obj.obj_usuario.id;
+                        $scope.obj.obj_usuario = response.data.message;
+                        if (response.data.message.id != 0) {
+                            $scope.outerForm.obj_usuario.$setValidity('exists', true);
+                        } else {
+                            $scope.outerForm.obj_usuario.$setValidity('exists', false);
+                            $scope.obj.obj_usuario.id = old_id;
+                        }
                     } else {
-                        $scope.outerForm.obj_usuario.$setValidity('exists', false);
-                        $scope.obj.obj_usuario.id = old_id;
+
                     }
                 });
             }
