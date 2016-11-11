@@ -115,6 +115,15 @@ angular.module('Services', [])
                 promise_removeOne: function (strClass, id) {
                     return $http.get(this.getAppUrl() + '?ob=' + strClass + '&op=remove&id=' + id, 'GET', '');
                 },
+                pendent_promise_setOne: function (strClass, jsonfile) {
+                    $http({
+                        method: 'GET',
+                        url: this.getAppUrl() + '?ob=' + strClass + '&op=set',
+                        data: {params: jsonfile},
+                        withCredentials: true,
+                        headers: {'Content-Type': 'application/json;charset=utf-8'}
+                    })
+                },
                 promise_setOne: function (strClass, jsonfile) {
                     $http.defaults.headers.put['Content-Type'] = 'application/json;charset=utf-8';
                     return $http.get(this.getAppUrl() + '?ob=' + strClass + '&op=set', {params: jsonfile});
