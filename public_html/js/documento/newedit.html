@@ -39,7 +39,7 @@ THE SOFTWARE.
                             </div>
                         </div>
                         -->
-                        <ng-form name="outerForm" class="form-horizontal" ng-show="result == null">
+                        <form name="outerForm" class="form-horizontal" ng-show="result == null">
 
                             <div id="id-group" class="form-group">
                                 <label class="col-sm-2 control-label" for="id">Identificador:</label>
@@ -305,15 +305,16 @@ THE SOFTWARE.
                                     <a class="btn btn-default" ng-click="close()">Cerrar</a>
                                 </div>
                             </div>
-                            </form>
+                            </form>                            
                             <div ng-show="result != null">
                                 <div class="alert alert-success" ng-show="result.status == 200">
+                                    
                                     <div ng-show="op == 'edit'">
                                         <h2>Se ha modificado el registro</h2>
                                         <a ng-href="#/documento/view/{{id}}">Ver el registro modificado</a>
                                     </div>
                                     <div ng-show="op == 'new'">
-                                        <h2>Se ha creado el registro</h2>
+                                        <h2>Se ha creado el registro con id={{result.message}}</h2>
                                         <a ng-href="#/documento/view/{{result.message}}">Ver el registro creado</a>
                                     </div>                        
                                 </div>
@@ -328,7 +329,6 @@ THE SOFTWARE.
                                         <h3>Código: {{result.status}}</h3>
                                         <h3>Mensaje: {{result.message}}</h3>                
                                     </div>
-
                                 </div>
                             </div>
                     </div>

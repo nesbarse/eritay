@@ -69,9 +69,8 @@ moduloDocumento.controller('DocumentoNewController', ['$scope', '$routeParams', 
             $scope.obj.alta = dateAltaAsString;
             $scope.obj.cambio = dateCambioAsString;
             var jsonToSend = {json: JSON.stringify(serverService.array_identificarArray($scope.obj))};
-            console.log(jsonToSend);
             serverService.promise_setOne($scope.ob, jsonToSend).then(function (data) {
-                $scope.result = data;
+                $scope.result = data.data;
             });
         };
 
