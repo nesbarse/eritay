@@ -27,8 +27,8 @@
  */
 
 'use strict';
-moduloDocumento.controller('DocumentoNewController', ['$scope', '$routeParams', '$location', 'serverService', 'sharedSpaceService', '$filter',
-    function ($scope, $routeParams, $location, serverService, sharedSpaceService, $filter) {
+moduloDocumento.controller('DocumentoNewController', ['$scope', '$routeParams', '$location', 'serverService', 'sharedSpaceService', '$filter', '$timeout',
+    function ($scope, $routeParams, $location, serverService, sharedSpaceService, $filter, $timeout) {
 
         $scope.eventSources = [];
 
@@ -37,6 +37,8 @@ moduloDocumento.controller('DocumentoNewController', ['$scope', '$routeParams', 
 
         $scope.title = "Creación de un nuevo documento";
         $scope.icon = "fa-file-text-o";
+        $scope.loading = false;
+        var filterTextTimeout;
 
         $scope.result = null;
 
@@ -74,18 +76,29 @@ moduloDocumento.controller('DocumentoNewController', ['$scope', '$routeParams', 
             });
         };
 
+
+
         $scope.$watch('obj.obj_tipodocumento.id', function () {
+
+            if (filterTextTimeout) {
+                $timeout.cancel(filterTextTimeout);
+            }
+            $scope.loading = true;
             if ($scope.obj) {
-                serverService.promise_getOne('tipodocumento', $scope.obj.obj_tipodocumento.id).then(function (response) {
-                    var old_id = $scope.obj.obj_tipodocumento.id;
-                    $scope.obj.obj_tipodocumento = response.data.message;
-                    if (response.data.message.id != 0) {
-                        $scope.outerForm.obj_tipodocumento.$setValidity('exists', true);
-                    } else {
-                        $scope.outerForm.obj_tipodocumento.$setValidity('exists', false);
-                        $scope.obj.obj_tipodocumento.id = old_id;
-                    }
-                });
+
+                filterTextTimeout = $timeout(function () {
+                    serverService.promise_getOne('tipodocumento', $scope.obj.obj_tipodocumento.id).then(function (response) {
+                        $scope.loading = false;
+                        var old_id = $scope.obj.obj_tipodocumento.id;
+                        $scope.obj.obj_tipodocumento = response.data.message;
+                        if (response.data.message.id != 0) {
+                            $scope.outerForm.obj_tipodocumento.$setValidity('exists', true);
+                        } else {
+                            $scope.outerForm.obj_tipodocumento.$setValidity('exists', false);
+                            $scope.obj.obj_tipodocumento.id = old_id;
+                        }
+                    });
+                }, 400);
             }
         });
 
