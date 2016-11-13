@@ -30,16 +30,13 @@
 moduloDocumento.controller('DocumentoNewController', ['$scope', '$routeParams', '$location', 'serverService', 'sharedSpaceService', '$filter', '$timeout',
     function ($scope, $routeParams, $location, serverService, sharedSpaceService, $filter, $timeout) {
 
-        $scope.eventSources = [];
 
         $scope.ob = 'documento';
         $scope.op = 'new';
 
         $scope.title = "Creación de un nuevo documento";
         $scope.icon = "fa-file-text-o";
-        $scope.loading = false;
-        var filterTextTimeout;
-
+      
         $scope.result = null;
 
         $scope.obj = {};
@@ -76,19 +73,9 @@ moduloDocumento.controller('DocumentoNewController', ['$scope', '$routeParams', 
             });
         };
 
-
-
         $scope.$watch('obj.obj_tipodocumento.id', function () {
-
-            if (filterTextTimeout) {
-                $timeout.cancel(filterTextTimeout);
-            }
-            $scope.loading = true;
-            if ($scope.obj) {
-
-                filterTextTimeout = $timeout(function () {
+            if ($scope.obj) {       
                     serverService.promise_getOne('tipodocumento', $scope.obj.obj_tipodocumento.id).then(function (response) {
-                        $scope.loading = false;
                         var old_id = $scope.obj.obj_tipodocumento.id;
                         $scope.obj.obj_tipodocumento = response.data.message;
                         if (response.data.message.id != 0) {
@@ -97,23 +84,22 @@ moduloDocumento.controller('DocumentoNewController', ['$scope', '$routeParams', 
                             $scope.outerForm.obj_tipodocumento.$setValidity('exists', false);
                             $scope.obj.obj_tipodocumento.id = old_id;
                         }
-                    });
-                }, 400);
+                    });            
             }
         });
 
-        $scope.$watch('obj.obj_usuario.id', function () {
-            if ($scope.obj) {
-                serverService.promise_getOne('usuario', $scope.obj.obj_usuario.id).then(function (response) {
-                    var old_id = $scope.obj.obj_usuario.id;
-                    $scope.obj.obj_usuario = response.data.message;
-                    if (response.data.message.id != 0) {
-                        $scope.outerForm.obj_usuario.$setValidity('exists', true);
-                    } else {
-                        $scope.outerForm.obj_usuario.$setValidity('exists', false);
-                        $scope.obj.obj_usuario.id = old_id;
-                    }
-                });
+        $scope.$watch('obj.obj_usuario.id', function () {            
+            if ($scope.obj) {        
+                    serverService.promise_getOne('usuario', $scope.obj.obj_usuario.id).then(function (response) {
+                        var old_id = $scope.obj.obj_usuario.id;
+                        $scope.obj.obj_usuario = response.data.message;
+                        if (response.data.message.id != 0) {
+                            $scope.outerForm.obj_usuario.$setValidity('exists', true);
+                        } else {
+                            $scope.outerForm.obj_usuario.$setValidity('exists', false);
+                            $scope.obj.obj_usuario.id = old_id;
+                        }
+                    });  
             }
         });
 
@@ -126,7 +112,6 @@ moduloDocumento.controller('DocumentoNewController', ['$scope', '$routeParams', 
         $scope.plist = function () {
             $location.path('/documento/plist');
         };
-
 
 
         //datepicker 1 
@@ -152,15 +137,6 @@ moduloDocumento.controller('DocumentoNewController', ['$scope', '$routeParams', 
             formatYear: 'yyyy',
             startingDay: 1
         };
-
-
-
-
-//        $scope.disabled = function (date, mode) {
-//            return mode === 'day' && (date.getDay() === 0 || date.getDay() === 6);
-//        };
-
-
 
 
     }]);
