@@ -62,6 +62,7 @@ eritay.config(['$routeProvider', function ($routeProvider) {
         $routeProvider.when('/documento/edit/:id', {templateUrl: 'js/documento/newedit.html', controller: 'DocumentoEditController'});
         $routeProvider.when('/documento/remove/:id', {templateUrl: 'js/documento/remove.html', controller: 'DocumentoRemoveController'});
         $routeProvider.when('/documento/plist/:page?/:rpp?', {templateUrl: 'js/documento/plist.html', controller: 'DocumentoPListController'});
+        $routeProvider.when('/documento/plistc/:page?/:rpp?', {templateUrl: 'js/documento/plistc.html', controller: 'DocumentoPListcController'});
         //------------
         $routeProvider.when('/usuario/view/:id', {templateUrl: 'js/usuario/view.html', controller: 'UsuarioViewController'});
         $routeProvider.when('/usuario/new/:id?', {templateUrl: 'js/usuario/newedit.html', controller: 'UsuarioNewController'});
@@ -85,36 +86,35 @@ eritay.config(['$routeProvider', function ($routeProvider) {
 
 eritay.run(function ($rootScope, $location, serverService, sessionService) {
     $rootScope.$on("$routeChangeStart", function (event, next, current) {
-        function failure() {
-            sessionService.setSessionInactive();
-            sessionService.setUsername('');
-            var nextUrl = next.$$route.originalPath;
-            if (nextUrl == '/home' || nextUrl == '/login' || nextUrl == '/license') {
-
-            } else {
-                $location.path("/login");
-            }
-        }
-        //$rootScope.authenticated = false;
         sessionService.setSessionInactive();
         sessionService.setUsername('');
-
         serverService.getSessionPromise().then(function (response) {
             if (response['status'] == 200) {
                 sessionService.setSessionActive();
                 sessionService.setUsername(response.data.message);
             } else {
-                failure();
-            }
-            ;
+                sessionService.setSessionInactive();
+                sessionService.setUsername('');
+                var nextUrl = next.$$route.originalPath;
+                if (nextUrl == '/home' || nextUrl == '/login' || nextUrl == '/license') {
+
+                } else {
+                    $location.path("/login");
+                }
+            }            
         }).catch(function (data) {
-            failure();
+            sessionService.setSessionInactive();
+            sessionService.setUsername('');
+            $location.path("/login");
         });
     });
 });
 
 
 var moduloSistema = angular.module('systemControllers', []);
+var moduloDirectivas = angular.module('Directives', []);
+
+
 var moduloUsuario = angular.module('usuarioControllers', []);
 var moduloDocumento = angular.module('documentoControllers', []);
 var moduloTipodocumento = angular.module('tipodocumentoControllers', []);

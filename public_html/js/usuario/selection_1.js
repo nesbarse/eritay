@@ -1,21 +1,21 @@
-/*
+/* 
  * Copyright (c) 2015 by Rafael Angel Aznar Aparici (rafaaznar at gmail dot com)
- *
- * eritay: The stunning micro-library that helps you to develop easily
+ * 
+ * eritay: The stunning micro-library that helps you to develop easily 
  *             AJAX web applications by using Java and jQuery
  * eritay is distributed under the MIT License (MIT)
  * Sources at https://github.com/rafaelaznar/
- *
+ * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
+ * 
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- *
+ * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -23,34 +23,25 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- *
+ * 
  */
 
-'use strict';
-/* Controllers */
 
-moduloDocumento.controller('DocumentoPListController', ['$scope', '$routeParams', 'serverService', '$location', '$q',
-    function ($scope, $routeParams, serverService, $location, $q) {
+'use strict';
+
+moduloUsuario.controller('UsuarioSelectionController', ['$scope', '$routeParams', 'serverService', '$location', 'sharedSpaceService',
+    function ($scope, $routeParams, serverService, $location, sharedSpaceService) {
+
+        $scope.ob = "usuario";
+        $scope.op = "selection";
+        $scope.title = "Selección de usuario";
+        $scope.icon = "fa-user";
+        $scope.neighbourhood = 2;
 
         $scope.visibles = {};
         $scope.visibles.id = true;
-        $scope.visibles.titulo = true;
-        $scope.visibles.contenido = true;
-        $scope.visibles.alta = true;
-        $scope.visibles.cambio = true;
-        $scope.visibles.hits = true;
-        $scope.visibles.id_usuario = true;
-        $scope.visibles.id_tipodocumento = true;
-        $scope.visibles.etiquetas = true;
-        $scope.visibles.publicado = true;
-        $scope.visibles.portada = true;
-        $scope.visibles.destacado = true;
-
-        $scope.ob = "documento";
-        $scope.op = "plist";
-        $scope.title = "Listado de documentos";
-        $scope.icon = "fa-file-text-o";
-        $scope.neighbourhood = 2;
+        $scope.visibles.login = true;
+        $scope.visibles.password = true;
 
         if (!$routeParams.page || $routeParams.page < 1) {
             $scope.numpage = 1;
@@ -76,28 +67,24 @@ moduloDocumento.controller('DocumentoPListController', ['$scope', '$routeParams'
         } else {
             $scope.filterParams = null;
         }
-        ;
 
         if ($routeParams.order) {
             $scope.orderParams = $routeParams.order;
         } else {
             $scope.orderParams = null;
         }
-        ;
 
         if ($routeParams.sfilter) {
             $scope.sfilterParams = $routeParams.sfilter;
         } else {
             $scope.sfilterParams = null;
         }
-        ;
 
         if ($routeParams.sfilter) {
-            $scope.filterExpression = $scope.filterParams  + '+' + $scope.sfilterParams;
+            $scope.filterExpression = $routeParams.filter + '+' + $routeParams.sfilter;
         } else {
-            $scope.filterExpression = $scope.filterParams ;
+            $scope.filterExpression = $routeParams.filter;
         }
-        ;
 
         serverService.promise_getCount($scope.ob, $scope.filterExpression).then(function (response) {
             if (response.status == 200) {
@@ -121,11 +108,21 @@ moduloDocumento.controller('DocumentoPListController', ['$scope', '$routeParams'
             $scope.status = "Error en la recepción de datos del servidor";
         });
 
-        $scope.getRangeArray = serverService.getRangeArray;
+        $scope.getRangeArray = function (lowEnd, highEnd) {
+            var rangeArray = [];
+            for (var i = lowEnd; i <= highEnd; i++) {
+                rangeArray.push(i);
+            }
+            return rangeArray;
+        };
 
-        $scope.evaluateMin = serverService.evaluateMin;
+        $scope.evaluateMin = function (lowEnd, highEnd) {
+            return Math.min(lowEnd, highEnd);
+        };
 
-        $scope.evaluateMax = serverService.evaluateMax;
+        $scope.evaluateMax = function (lowEnd, highEnd) {
+            return Math.max(lowEnd, highEnd);
+        };
 
         $scope.gotopage = function (numpage) {
             $scope.numpage = numpage;
@@ -160,4 +157,9 @@ moduloDocumento.controller('DocumentoPListController', ['$scope', '$routeParams'
             return false;
         };
 
+        $scope.go = function (num) {
+            sharedSpaceService.getObject().obj_usuario.id = num;
+            sharedSpaceService.setFase(2);
+            $location.path(sharedSpaceService.getReturnLink());
+        };
     }]);

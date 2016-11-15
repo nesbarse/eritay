@@ -71,6 +71,41 @@ angular.module('Services', [])
                     return strPath.substr(1, strPath.substr(1, strPath.length).indexOf('/'));
                 },
                 ////////////////////////////////////////////////////////////////
+                getRangeArray: function (lowEnd, highEnd) {
+                    var rangeArray = [];
+                    for (var i = lowEnd; i <= highEnd; i++) {
+                        rangeArray.push(i);
+                    }
+                    return rangeArray;
+                },
+                evaluateMin: function (lowEnd, highEnd) {
+                    return Math.min(lowEnd, highEnd);
+                },
+                evaluateMax: function (lowEnd, highEnd) {
+                    return Math.max(lowEnd, highEnd);
+                },
+                getUrlFromParams: function (ob, op, numpage, rpp, ufilter, uorder) {
+                    var ruta = ob + '/' + op + '/' + numpage + '/' + rpp;
+                    ruta += "/" + this.getParamString(ufilter);
+                    ruta += "/" + this.getParamString(uorder);
+                    return ruta;
+                },
+                getParamString: function (paramArray) {
+                    var newParamStr = "";
+                    if (paramArray) {
+                        for (var i = 0; i < paramArray.length; i++) {
+                            if (i !== 0)
+                                newParamStr += "&";
+                            for (var j = 0; j < paramArray[i].length; j++) {
+                                if (j !== 0)
+                                    newParamStr += ",";
+                                newParamStr += paramArray[i][j];
+                            }
+                        }
+                    }
+                    return newParamStr;
+                },
+                //**************************
                 getLoginPromise: function (username, password) {
                     return $http.get(this.getAppUrl() + '?ob=usuario&op=login&user=' + username + '&pass=' + password, 'GET', '');
                 },
