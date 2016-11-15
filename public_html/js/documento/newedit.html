@@ -214,12 +214,13 @@ THE SOFTWARE.
 
 
 
-                            <!-- falta chequear la validez-->
+                            
                             <div class="form-group" 
                                  ng-class="{'has-error': (outerForm.obj_usuario.$error.required ||
                                                      outerForm.obj_usuario.$error.exists ||
                                                      outerForm.obj_usuario.$error.validatemin)
-                                                     && !outerForm.obj_usuario.$pristine}">                                                                                                                                   
+                                                     && !outerForm.obj_usuario.$pristine}"
+                                                             ng-show="show_obj_usuario">                                                                                                                                   
                                 <label class="col-sm-2 control-label" for="obj_usuario">Usuario:</label>
                                 <div class="control col-sm-3">
                                     <div class="input-group foreign" id="obj_usuario_group">
