@@ -46,6 +46,8 @@ angular.module('Filters').filter('clipString', function ($filter)
         if (input.length > 14) {
             return input.substr(0, 10).trim() + " ...";
 
+        } else {
+            return input;
         }
 
     };
